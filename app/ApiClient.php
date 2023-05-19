@@ -47,29 +47,38 @@ class ApiClient
         return $this->commentCollection(json_decode($responseContent));
     }
 
-    public function getArticle(int $id): Article
+    public function getArticle(int $id): ?Article
     {
-        if (!Cache::has('article_' . $id)) {
-            $response = $this->client->get('posts/' . $id);
-            $responseContent = $response->getBody()->getContents();
-            Cache::remember('article_' . $id, $responseContent);
-        } else {
-            $responseContent = Cache::get('article_' . $id);
+        try {
+            if (!Cache::has('article_' . $id)) {
+                $response = $this->client->get('posts/' . $id);
+                $responseContent = $response->getBody()->getContents();
+                Cache::remember('article_' . $id, $responseContent);
+            } else {
+                $responseContent = Cache::get('article_' . $id);
+            }
+            return $this->createArticle(json_decode($responseContent));
+        } catch (\RuntimeException $exception) {
+            return null;
         }
-        return $this->createArticle(json_decode($responseContent));
     }
 
-    public function getUser($id): User
+    public function getUser($id): ?User
     {
-        if (!Cache::has('user_' . $id)) {
-            $response = $this->client->get('users/' . $id);
-            $responseContent = $response->getBody()->getContents();
-            Cache::remember('user_' . $id, $responseContent);
-        } else {
-            $responseContent = Cache::get('user_' . $id);
+        try {
+            if (!Cache::has('user_' . $id)) {
+                $response = $this->client->get('users/' . $id);
+                $responseContent = $response->getBody()->getContents();
+                Cache::remember('user_' . $id, $responseContent);
+            } else {
+                $responseContent = Cache::get('user_' . $id);
+            }
+            return $this->createUser(json_decode($responseContent));
+        } catch (\RuntimeException $exception) {
+            return null;
         }
-        return $this->createUser(json_decode($responseContent));
     }
+
     public function getUserPosts(int $userId): array
     {
         if (!Cache::has('userPosts_' . $userId)) {
@@ -89,6 +98,7 @@ class ApiClient
         }
         return $this->articleCollection;
     }
+
     private function commentCollection($comments): array
     {
         foreach ($comments as $comment) {

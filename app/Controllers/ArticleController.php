@@ -2,52 +2,30 @@
 
 namespace App\Controllers;
 
-use App\ApiClient;
 use App\Core\View;
+use App\Services\Article\Index\IndexArticleService;
+use App\Services\Article\Show\ShowArticleRequest;
+use App\Services\Article\Show\ShowArticleService;
 
 class ArticleController
 {
-    private ApiClient $client;
-
-    public function __construct()
+    public function index(): View
     {
-        $this->client = new ApiClient();
+        $service = new IndexArticleService();
+        $articles = $service->execute();
+
+        return new View('articles', ['articles' => $articles]);
     }
 
-    public function home(): View
+    public function show(int $id): View
     {
-        $articles = $this->client->getArticles();
-        $articleContent = [];
+        $service = new ShowArticleService();
+        $response = $service->execute(new ShowArticleRequest($id));
 
-        foreach ($articles as $article) {
-            $userId = $article->getUserId();
-            $user = $this->client->getUser($userId);
-            $articleContent[] = [
-                'article' => $article,
-                'user' => $user,
-            ];
-        }
-
-        return new View('articles', ['articles' => $articleContent]);
-    }
-
-    public function article(int $id): View
-    {
-        $article = $this->client->getArticle($id);
-        $comments = $this->client->getComments($id);
         return new View('article', [
-            'article' => $article,
-            'comments' => $comments
+            'article' => $response->getArticle(),
+            'comments' => $response->getComments()
         ]);
     }
 
-    public function user(int $id): View
-    {
-        $user = $this->client->getUser($id);
-        $articles = $this->client->getUserPosts($id);
-        return new View('user', [
-            'articles' => $articles,
-            'user' => $user
-        ]);
-    }
 }

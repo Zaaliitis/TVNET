@@ -6,14 +6,24 @@ use Carbon\Carbon;
 
 class Cache
 {
-    private static string $cacheDir = '../Cache/';
+    private static string $cacheDir = '';
+
+    private static function getCacheDir(): string
+    {
+        if (empty(self::$cacheDir)) {
+            $rootDir = dirname(__DIR__, 2);
+            self::$cacheDir = $rootDir . '/Cache/';
+        }
+        return self::$cacheDir;
+    }
 
     public static function remember(string $key, string $data, int $ttl = 600): void
     {
-        if (!is_dir(self::$cacheDir)) {
-            mkdir(self::$cacheDir);
+        $cacheDir = self::getCacheDir();
+        if (!is_dir($cacheDir)) {
+            mkdir($cacheDir, 0777, true);
         }
-        $cacheFile = self::$cacheDir . $key;
+        $cacheFile = $cacheDir . $key;
         file_put_contents($cacheFile, json_encode([
             'expires_at' => Carbon::now('GMT+2')->addSeconds($ttl),
             'content' => $data
@@ -22,27 +32,27 @@ class Cache
 
     public static function forget(string $key): void
     {
-        unlink(self::$cacheDir . $key);
+        $cacheDir = self::getCacheDir();
+        unlink($cacheDir . $key);
     }
 
     public static function get(string $key): ?string
     {
-        if (!self::has($key))
-        {
+        $cacheDir = self::getCacheDir();
+        if (!self::has($key)) {
             return null;
         }
-        $content = json_decode(file_get_contents(self::$cacheDir . $key));
+        $content = json_decode(file_get_contents($cacheDir . $key));
         return $content->content;
     }
 
     public static function has(string $key): bool
     {
-        if (!file_exists(self::$cacheDir . $key))
-        {
+        $cacheDir = self::getCacheDir();
+        if (!file_exists($cacheDir . $key)) {
             return false;
         }
-        $content = json_decode(file_get_contents(self::$cacheDir . $key));
+        $content = json_decode(file_get_contents($cacheDir . $key));
         return Carbon::now('GMT+2') < $content->expires_at;
     }
-
 }
