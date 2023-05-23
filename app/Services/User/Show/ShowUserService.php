@@ -2,22 +2,25 @@
 
 namespace App\Services\User\Show;
 
-use App\ApiClient;
 use App\Exceptions\UserNotFoundException;
+use app\Repositories\Article\JsonPlaceholderArticleRepository;
+use app\Repositories\User\JsonPlaceholderUserRepository;
 
 class ShowUserService
 {
-    private ApiClient $client;
+    private JsonPlaceholderUserRepository $userRepository;
+    private JsonPlaceholderArticleRepository $articleRepository;
 
     public function __construct()
     {
-        $this->client = new ApiClient();
+        $this->userRepository = new JsonPlaceholderUserRepository();
+        $this->articleRepository = new JsonPlaceholderArticleRepository();
     }
 
     public function execute(ShowUserRequest $request): ShowUserResponse
     {
-        $user = $this->client->getUser($request->getUserId());
-        $articles = $this->client->getUserPosts($request->getUserId());
+        $user = $this->userRepository->getById($request->getUserId());
+        $articles = $this->articleRepository->getByUserId($request->getUserId());
 
         if ($user == null) {
             throw new UserNotFoundException("User " . $request->getUserId() . " not found");

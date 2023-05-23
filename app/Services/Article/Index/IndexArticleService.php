@@ -2,22 +2,23 @@
 
 namespace App\Services\Article\Index;
 
-use App\ApiClient;
+use app\Repositories\Article\JsonPlaceholderArticleRepository;
 use App\Services\User\Index\IndexUserService;
 
 class IndexArticleService
 {
-    private ApiClient $client;
+    private JsonPlaceholderArticleRepository $articleRepository;
+
 
     public function __construct()
     {
-        $this->client = new ApiClient();
+        $this->articleRepository = new JsonPlaceholderArticleRepository();
     }
 
     public function execute(): array
     {
         $articleContent = [];
-        $articles = $this->client->getArticles();
+        $articles = $this->articleRepository->all();
         foreach ($articles as $article) {
             $userId = $article->getUserId();
             $user = (new IndexUserService())->execute($userId);

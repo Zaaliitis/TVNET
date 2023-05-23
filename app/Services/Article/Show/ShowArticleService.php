@@ -2,25 +2,28 @@
 
 namespace App\Services\Article\Show;
 
-use App\ApiClient;
 use App\Exceptions\ArticleNotFoundException;
+use app\Repositories\Article\JsonPlaceholderArticleRepository;
+use app\Repositories\Comment\JsonPlaceholderCommentRepository;
 
 class ShowArticleService
 {
-    private ApiClient $client;
+    private JsonPlaceholderArticleRepository $articleRepository;
+    private JsonPlaceholderCommentRepository $commentRepository;
 
     public function __construct()
     {
-        $this->client = new ApiClient();
+        $this->articleRepository = new JsonPlaceholderArticleRepository();
+        $this->commentRepository = new JsonPlaceholderCommentRepository();
     }
 
     public function execute(ShowArticleRequest $request): ShowArticleResponse
     {
-        $article = $this->client->getArticle($request->getArticleId());
+        $article = $this->articleRepository->getById($request->getArticleId());
         if ($article == null) {
             throw new ArticleNotFoundException("Article " . $request->getArticleId() ." not found");
         }
-        $comments = $this->client->getComments($request->getArticleId());
+        $comments = $this->commentRepository->all($request->getArticleId());
         return new ShowArticleResponse($article, $comments);
     }
 }
