@@ -1,10 +1,9 @@
 <?php
 
-namespace app\Repositories\Comment;
+namespace App\Repositories\Comment;
 
 use App\Core\Cache;
 use App\Models\Comment;
-use App\Repositories\Article\CommentRepository;
 use GuzzleHttp\Client;
 use stdClass;
 

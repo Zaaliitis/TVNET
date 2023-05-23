@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Repositories\Article;
+namespace App\Repositories\Article;
 
 use App\Core\Cache;
 use App\Models\Article;

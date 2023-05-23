@@ -2,7 +2,7 @@
 
 namespace App\Services\Article\Index;
 
-use app\Repositories\Article\JsonPlaceholderArticleRepository;
+use App\Repositories\Article\JsonPlaceholderArticleRepository;
 use App\Services\User\Index\IndexUserService;
 
 class IndexArticleService

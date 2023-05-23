@@ -3,8 +3,8 @@
 namespace App\Services\Article\Show;
 
 use App\Exceptions\ArticleNotFoundException;
-use app\Repositories\Article\JsonPlaceholderArticleRepository;
-use app\Repositories\Comment\JsonPlaceholderCommentRepository;
+use App\Repositories\Article\JsonPlaceholderArticleRepository;
+use App\Repositories\Comment\JsonPlaceholderCommentRepository;
 
 class ShowArticleService
 {

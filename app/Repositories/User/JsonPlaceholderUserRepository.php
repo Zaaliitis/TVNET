@@ -1,6 +1,7 @@
 <?php
 
-namespace app\Repositories\User;
+namespace App\Repositories\User;
+
 
 use App\Core\Cache;
 use App\Models\User;

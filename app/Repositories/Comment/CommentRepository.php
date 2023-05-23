@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Repositories\Article;
-
-use App\Models\Comment;
+namespace App\Repositories\Comment;
 
 interface CommentRepository
 {
-    public function all(): array;
+    public function all(int $postId): array;
 
 }

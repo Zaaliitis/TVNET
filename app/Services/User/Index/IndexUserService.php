@@ -3,7 +3,7 @@
 namespace app\Services\User\Index;
 
 use App\Models\User;
-use app\Repositories\User\JsonPlaceholderUserRepository;
+use App\Repositories\User\JsonPlaceholderUserRepository;
 
 class IndexUserService
 {

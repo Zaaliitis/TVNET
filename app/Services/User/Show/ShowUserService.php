@@ -3,8 +3,8 @@
 namespace App\Services\User\Show;
 
 use App\Exceptions\UserNotFoundException;
-use app\Repositories\Article\JsonPlaceholderArticleRepository;
-use app\Repositories\User\JsonPlaceholderUserRepository;
+use App\Repositories\Article\JsonPlaceholderArticleRepository;
+use App\Repositories\User\JsonPlaceholderUserRepository;
 
 class ShowUserService
 {
